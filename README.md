@@ -9,5 +9,5 @@ This is especially useful for scanned documents, large catalogs, or PDFs with he
 - Automatically compares **before vs after** size
 - Creates an output folder (`saida/`) with the optimized file
 
-## 📂 Project Structure
+
 
