@@ -35,19 +35,19 @@ if __name__ == "__main__":
     if not INPUT.exists():
         raise SystemExit(f"File not found: {INPUT}")
 
-    antes = _mb(INPUT)
+    before = _mb(INPUT)
 
-    # 1) tenta moderado (/ebook, ~150 dpi)
+    # 1) try moderate (/ebook, ~150 dpi)
     _run_gs(INPUT, OUTPUT, profile="/ebook", color_dpi=150)
-    depois = _mb(OUTPUT)
+    after = _mb(OUTPUT)
 
-    # 2) se reduziu < 10%, tenta mais forte (/screen, ~100 dpi)
-    if depois >= antes * 0.90:
+    # 2) if it reduced < 10%, try harder (/screen, ~100 dpi)
+    if before >= after * 0.90:
         _run_gs(INPUT, OUTPUT, profile="/screen", color_dpi=100, gray_dpi=100)
         depois = _mb(OUTPUT)
 
-    print(f"{INPUT.name}: {antes:.2f} MB -> {depois:.2f} MB  (redução {(1 - depois/antes)*100:.1f}%)")
-    print(f"Arquivo final: {OUTPUT}")
+    print(f"{INPUT.name}: {before:.2f} MB -> {after:.2f} MB  (reduction {(1 - after/before)*100:.1f}%)")
+    print(f"Final file: {OUTPUT}")
 
 
 
