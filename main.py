@@ -1,8 +1,8 @@
 import shutil, subprocess
 from pathlib import Path
 
-INPUT = Path("entrada/CV_Marcos_Kemer_IT.pdf")  
-OUTPUT   = Path("saida/resultado.pdf")
+INPUT = Path("input/file_name.pdf")  
+OUTPUT   = Path("output/result.pdf")
 OUTPUT .parent.mkdir(exist_ok=True)
 
 def _gs_exe():
@@ -11,7 +11,7 @@ def _gs_exe():
 def _run_gs(src: Path, dst: Path, profile="/ebook", color_dpi=150, gray_dpi=150, mono_dpi=300):
     exe = _gs_exe()
     if not exe:
-        raise RuntimeError("Ghostscript não encontrado. Instale o Ghostscript e tente novamente.")
+        raise RuntimeError("Ghostscript not found. Install the Ghostscript and try it again.")
     cmd = [
         exe, "-sDEVICE=pdfwrite",
         "-dCompatibilityLevel=1.4",
@@ -33,7 +33,7 @@ def _mb(p: Path) -> float:
 
 if __name__ == "__main__":
     if not INPUT.exists():
-        raise SystemExit(f"Arquivo não encontrado: {INPUT}")
+        raise SystemExit(f"File not found: {INPUT}")
 
     antes = _mb(INPUT)
 
