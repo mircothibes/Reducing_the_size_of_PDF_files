@@ -1,0 +1,1 @@
+# No Python packages required. Ghostscript must be installed on the OS.

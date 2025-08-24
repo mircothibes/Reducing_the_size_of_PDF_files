@@ -1,0 +1,13 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Project I/O
+/input/*
+!/input/.gitkeep
+/output/*
+
+# OS
+.DS_Store
+Thumbs.db
