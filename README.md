@@ -47,4 +47,28 @@ No additional Python packages are required besides the standard library (`tkinte
    source .venv/bin/activate   # Linux/macOS
    .\.venv\Scripts\activate    # Windows PowerShell
 
+## The GUI window will open:
 
+ - Choose Folder → Select the folder containing your PDF
+ - Choose PDF → Pick a PDF file
+ - Save as → Select where to save the compressed PDF
+ - Adjust profile and DPI if desired
+ - Click Compress
+
+## Compression Profiles
+
+ - Ghostscript presets: 
+ - /screen – lowest quality, smallest size (~72 dpi)
+ - /ebook – good balance for reading (~150 dpi)
+ - /printer – higher quality (~300 dpi)
+ - /prepress – highest quality, larger size
+
+## Notes
+
+- If the PDF is mostly text/vector, size reduction will be minimal.
+- For scanned/image-heavy PDFs, reduction can be 50–80%. 
+- Aggressive mode retries with lower settings if initial reduction is too small. 
+
+## License
+
+MIT License – feel free to use, modify and share.
