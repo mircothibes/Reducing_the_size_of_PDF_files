@@ -5,6 +5,14 @@ Provides a friendly interface to select a folder, choose a PDF, adjust compressi
 
 ---
 
+## 🖼️ Screenshot
+
+Here is how the application looks:
+
+![PDF Reducer GUI](docs/screenshot_gui.png)
+
+---
+
 ## ✨ Features
 - Graphical interface with **Tkinter**
 - Choose input folder and PDF file
