@@ -236,11 +236,27 @@ class App(tk.Tk):
         ttk.Label(bar, textvariable=self.status, anchor="w").pack(fill="x", padx=8, pady=6)
 
     def choose_folder(self):
+        """
+        Open a directory selection dialog and update `self.selected_dir`.
+
+        This is used to point the application to the folder where input PDFs
+        are located. The chosen folder path is stored in the Tkinter StringVar
+        `self.selected_dir`.
+        """
         folder = filedialog.askdirectory(initialdir=self.selected_dir.get() or str(Path.cwd()))
         if folder:
             self.selected_dir.set(folder)
 
     def choose_pdf(self):
+        """
+        Open a file selection dialog to choose an input PDF.
+
+        The file dialog starts in the currently selected folder (`self.selected_dir`).
+        When a PDF is chosen:
+        - The path is stored in `self.selected_file`.
+        - A default output path is suggested inside the `output/` folder,
+          with suffix `_reduced.pdf`.
+        """
         init = self.selected_dir.get() or str(Path.cwd())
         file = filedialog.askopenfilename(
             initialdir=init,
@@ -249,12 +265,18 @@ class App(tk.Tk):
         )
         if file:
             self.selected_file.set(file)
-            # se saída não definida, sugere output/result_<nome>.pdf
             out_dir = Path.cwd() / "output"
             out_name = f"{Path(file).stem}_reduced.pdf"
             self.output_path.set(str(out_dir / out_name))
 
     def choose_output(self):
+        """
+        Open a save file dialog to choose where the compressed PDF will be saved.
+
+        If the user already has a suggested path in `self.output_path`, that folder
+        will be used as the initial directory. Otherwise, defaults to `./output/`.
+        The chosen file path is stored in `self.output_path`.
+        """
         initdir = str(Path(self.output_path.get()).parent) if self.output_path.get() else str(Path.cwd() / "output")
         file = filedialog.asksaveasfilename(
             defaultextension=".pdf",
@@ -267,6 +289,15 @@ class App(tk.Tk):
             self.output_path.set(file)
 
     def on_compress(self):
+        """
+        Trigger PDF compression when the user clicks the 'Compress' button.
+
+        - Validates that a source file is selected and exists.
+        - Reads compression settings (profile, DPI, fallback options).
+        - Updates the status to "Compressing…" and disables the UI.
+        - Starts the actual compression process in a separate thread
+          (to keep the GUI responsive), calling `_do_compress`.
+        """
         src = Path(self.selected_file.get())
         if not src.exists():
             messagebox.showerror("Error", "Please choose a valid input PDF.")
@@ -284,7 +315,6 @@ class App(tk.Tk):
         self.status.set("Compressing…")
         self._disable()
 
-        # rodar em thread para não travar a UI
         th = threading.Thread(
             target=self._do_compress,
             args=(src, dst, prof, dpi, mono, aggr, aggr_prof, aggr_dpi, min_gain),
