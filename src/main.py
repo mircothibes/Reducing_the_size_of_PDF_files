@@ -323,6 +323,37 @@ class App(tk.Tk):
         th.start()
 
     def _do_compress(self, src, dst, prof, dpi, mono, aggr, aggr_prof, aggr_dpi, min_gain):
+        """
+        Perform the actual compression using Ghostscript.
+
+        Parameters
+        ----------
+        src : Path
+            Input PDF file.
+        dst : Path
+            Output PDF file.
+        prof : str
+            Ghostscript profile for the first compression pass.
+        dpi : int
+            DPI for color/gray images.
+        mono : int
+            DPI for monochrome images.
+        aggr : bool
+            Whether to enable aggressive fallback.
+        aggr_prof : str
+            Profile to use for fallback.
+        aggr_dpi : int
+            DPI for fallback.
+        min_gain : float
+            Minimum % reduction required to skip fallback.
+
+        Behavior
+        --------
+        - Runs Ghostscript with initial settings.
+        - If the size reduction is below `min_gain` and aggressive mode is enabled,
+          reruns Ghostscript with fallback settings.
+        - Displays success or error messages in the GUI.
+        """
         try:
             before = _mb(src)
             self._update_status(f"Pass 1: {prof} @ {dpi}dpi…")
@@ -359,9 +390,23 @@ class App(tk.Tk):
             messagebox.showerror("Unexpected error", repr(e))
 
     def _update_status(self, text):
+        """
+        Update the status bar text at the bottom of the GUI.
+
+        Parameters
+        ----------
+        text : str
+            Text to display.
+        """
         self.status.set(text)
 
     def _disable(self):
+        """
+        Disable all child widgets of the main window.
+
+        This is used while the compression process is running,
+        to prevent user interaction that could cause conflicts.
+        """
         for child in self.winfo_children():
             try:
                 child.configure(state="disabled")
@@ -369,6 +414,12 @@ class App(tk.Tk):
                 pass
 
     def _enable(self):
+        """
+        Re-enable all child widgets of the main window.
+
+        This restores interactivity after compression finishes
+        or an error occurs.
+        """
         for child in self.winfo_children():
             try:
                 child.configure(state="normal")
