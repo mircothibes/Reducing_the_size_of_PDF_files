@@ -1,3 +1,32 @@
+"""
+PDF Size Reducer (Tkinter GUI)
+
+This script provides a graphical interface (built with Tkinter) to reduce the size
+of PDF files using Ghostscript. The user can choose a folder, select a PDF, adjust
+compression settings, and save the optimized result.
+
+✨ Features:
+- Friendly GUI for selecting input/output PDF files
+- Ghostscript integration for compression
+- Support for Ghostscript profiles: /screen, /ebook, /printer, /prepress
+- Adjustable DPI resolution for color/gray and monochrome images
+- Aggressive fallback: if the reduction is below a threshold, rerun with stronger settings
+- Progress feedback and before/after file size comparison
+
+⚡ Requirements:
+- Python 3.9+
+- Tkinter (comes with standard Python installation)
+- Ghostscript installed and available in PATH
+
+Typical Usage:
+--------------
+1. Run: `python main.py`
+2. Select input folder and PDF.
+3. Adjust profile/DPI if necessary.
+4. Click "Compress".
+5. The reduced PDF will be saved in the output folder.
+"""
+
 import shutil
 import subprocess
 from pathlib import Path
@@ -9,10 +38,37 @@ from tkinter import ttk, filedialog, messagebox
 # Ghostscript helpers
 # -----------------------
 def _gs_exe():
-    # Windows: gswin64c/gswin32c; Linux/macOS: gs
+    """
+    Detect Ghostscript executable on the system.
+
+    Returns
+    -------
+    str or None
+        Path to the Ghostscript executable, or None if not found.
+    """
     return shutil.which("gs") or shutil.which("gswin64c") or shutil.which("gswin32c")
 
 def _run_gs(src: Path, dst: Path, profile="/ebook", color_dpi=150, gray_dpi=150, mono_dpi=300, quiet=True):
+    """
+    Run Ghostscript to compress a PDF file.
+
+    Parameters
+    ----------
+    src : Path
+        Path to the input PDF.
+    dst : Path
+        Path to the output PDF.
+    profile : str, optional
+        Ghostscript profile (/screen, /ebook, /printer, /prepress).
+    color_dpi : int, optional
+        DPI resolution for color images.
+    gray_dpi : int, optional
+        DPI resolution for grayscale images.
+    mono_dpi : int, optional
+        DPI resolution for monochrome images.
+    quiet : bool, optional
+        If True, suppress Ghostscript output.
+    """
     exe = _gs_exe()
     if not exe:
         raise RuntimeError("Ghostscript not found. Install Ghostscript and ensure it is in PATH.")
@@ -36,13 +92,57 @@ def _run_gs(src: Path, dst: Path, profile="/ebook", color_dpi=150, gray_dpi=150,
     subprocess.run(cmd, check=True)
 
 def _mb(p: Path) -> float:
+    """
+    Calculate file size in MB.
+
+    Parameters
+    ----------
+    p : Path
+        Path to the file.
+
+    Returns
+    -------
+    float
+        File size in megabytes.
+    """
     return p.stat().st_size / (1024*1024)
 
 # -----------------------
 # GUI
 # -----------------------
 class App(tk.Tk):
+    """
+    Tkinter-based GUI application for PDF compression.
+
+    Attributes
+    ----------
+    selected_dir : StringVar
+        Folder containing input PDFs.
+    selected_file : StringVar
+        Path to the selected input PDF.
+    output_path : StringVar
+        Path to the output compressed PDF.
+    profile : StringVar
+        Ghostscript profile.
+    dpi : IntVar
+        DPI for color/gray images.
+    mono_dpi : IntVar
+        DPI for monochrome images.
+    aggressive : BooleanVar
+        Enable aggressive fallback compression.
+    aggr_profile : StringVar
+        Profile for aggressive fallback.
+    aggr_dpi : IntVar
+        DPI for aggressive fallback.
+    min_gain : DoubleVar
+        Minimum percentage gain required before triggering fallback.
+    status : StringVar
+        Current status text displayed at the bottom of the GUI.
+    """
     def __init__(self):
+        """
+        Initialize the main application window and variables.
+        """
         super().__init__()
         self.title("PDF Size Reducer — Ghostscript")
         self.geometry("640x360")
@@ -64,6 +164,9 @@ class App(tk.Tk):
         self._build_ui()
 
     def _build_ui(self):
+        """
+        Build the Tkinter GUI layout: input/output selectors, options, and buttons.
+        """
         pad = {"padx": 8, "pady": 6}
 
         # Folder row
