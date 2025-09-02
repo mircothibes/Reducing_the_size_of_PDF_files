@@ -80,3 +80,11 @@ No additional Python packages are required besides the standard library (`tkinte
 ## License
 
 MIT License – feel free to use, modify and share.
+
+---
+
+## 👨‍💻 Author
+
+Developed by Marcos Vinicius Thibes Kemer
+
+---
