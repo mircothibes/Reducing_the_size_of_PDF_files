@@ -1,7 +1,4 @@
-<table>
-<tr>
-  <td><img src="docs/pdf_reducer_whitebg.png" alt="Logo" width="120"></td>
-  <td><h1>PDF Size Reducer (GUI)</h1>
+# PDF Size Reducer (GUI) <img src="docs/pdf_reducer_whitebg.png" alt="Logo" width="60" align="left" />
 
 A simple **Python + Tkinter** tool to compress PDF files using **Ghostscript**.  
 Provides a friendly interface to select a folder, choose a PDF, adjust compression settings, and save the optimized file.
