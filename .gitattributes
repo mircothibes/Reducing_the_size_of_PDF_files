@@ -1,2 +1,25 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# ---- Exclude non-source from language stats (GitHub Linguist) ----
+
+# Documentation
+docs/**                 linguist-documentation
+README*                 linguist-documentation
+*.html                  linguist-documentation
+*.tex                   linguist-documentation
+
+# Build / outputs / installers (generated or vendored)
+build/**                linguist-generated
+dist/**                 linguist-generated
+output/**               linguist-generated
+input/**                linguist-generated
+Output/**               linguist-generated
+*.spec                  linguist-generated
+*.ico                   linguist-generated
+*.png                   linguist-generated
+*.jpg                   linguist-generated
+
+# Installer script (not source code of the app)
+installer.iss          linguist-vendored
+
+# (Optional) force Python detection if needed
+# *.py                  linguist-language=Python
+
