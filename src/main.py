@@ -46,7 +46,26 @@ def _gs_exe():
     str or None
         Path to the Ghostscript executable, or None if not found.
     """
-    return shutil.which("gs") or shutil.which("gswin64c") or shutil.which("gswin32c")
+     # 1) explicit via env var
+    env = os.environ.get("GHOSTSCRIPT_EXE")
+    if env and Path(env).exists():
+        return env
+
+    # 2) PATH (gs, gswin64c, gswin32c)
+    exe = shutil.which("gs") or shutil.which("gswin64c") or shutil.which("gswin32c")
+    if exe:
+        return exe
+
+    # 3) common Windows install locations (pick latest)
+    for base in (r"C:\Program Files\gs", r"C:\Program Files (x86)\gs"):
+        p = Path(base)
+        if p.exists():
+            for ver in sorted(p.iterdir(), reverse=True):
+                for name in ("gswin64c.exe", "gswin32c.exe"):
+                    cand = ver / "bin" / name
+                    if cand.exists():
+                        return str(cand)
+    return None
 
 def _run_gs(src: Path, dst: Path, profile="/ebook", color_dpi=150, gray_dpi=150, mono_dpi=300, quiet=True):
     """
