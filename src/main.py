@@ -27,7 +27,7 @@ Typical Usage:
 5. The reduced PDF will be saved in the output folder.
 """
 
-import shutil
+import os, shutil
 import subprocess
 from pathlib import Path
 import threading
