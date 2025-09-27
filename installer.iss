@@ -38,8 +38,8 @@ Name: "open_gs_site"; Description: "Open Ghostscript download page after setup";
 
 [Files]
 ; Copy your built EXE and icon into the install folder
-Source: "dist\{#MyExe}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyIcon}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\PDF-Reducer.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "pdf_reducer_whitebg.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 ; Start Menu
