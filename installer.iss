@@ -13,12 +13,12 @@
 ; Generate a new GUID in Inno: Tools -> Generate GUID
 AppId={{6F6E9F2F-3C0C-4B8D-8B72-52A9D75F6B2E}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
+AppVersion=1.0.1
 AppPublisher={#MyPublisher}
 AppPublisherURL={#MyURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputBaseFilename=PDF-Reducer-Setup
+OutputBaseFilename=PDF-Reducer-Setup-1.0.1
 OutputDir=Output
 Compression=lzma
 SolidCompression=yes
